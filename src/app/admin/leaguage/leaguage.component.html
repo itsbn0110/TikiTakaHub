@@ -1,0 +1,30 @@
+<ul
+  ngbNav
+  #nav="ngbNav"
+  [(activeId)]="active"
+  (navChange)="onNavChange($event)"
+  class="nav-tabs"
+>
+  <li [ngbNavItem]="1">
+    <button ngbNavLink>
+      <i class="fa-solid fa-list" style="color: #74C0FC;"></i>
+      Danh sách giải đấu
+    </button>
+    <ng-template  ngbNavContent>
+      <app-list-leaguage ></app-list-leaguage>
+    </ng-template>
+  </li>
+  <li [ngbNavItem]="2"  >
+    <button ngbNavLink>
+      <i class="fa-solid fa-plus"></i>
+      Thêm giải đấu
+    </button>
+    <ng-template ngbNavContent>
+      <app-add-leaguage></app-add-leaguage>
+    </ng-template>
+  </li>
+</ul>
+
+<div [ngbNavOutlet]="nav" class="mt-4"></div>
+
+

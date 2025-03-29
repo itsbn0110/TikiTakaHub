@@ -1,0 +1,64 @@
+<h1 style="color: rgb(166, 27, 166);"><i class="bi bi-list-stars" style="color: rgb(166, 27, 166); "></i> Bảng xếp hạng</h1>
+<table class="table table-responsive ">
+  <thead>
+    <tr>
+      <th class="text-body-secondary">STT</th>
+      <th class="text-body-secondary"> Tên đội bóng</th>
+      <th class="text-end text-body-secondary d-none-sm"> Số trận thắng</th>
+      <th class="text-end text-body-secondary d-none-sm"> Số trận thua</th>
+      <th class="text-end text-body-secondary d-none-sm"> Số trận  hòa</th>
+      <th class="text-end text-body-secondary d-none-sm"> Bàn thắng</th>
+      <th class="text-end text-body-secondary d-none-sm">  Bàn thua</th>
+      <th class="text-end text-body-secondary d-none-sm">Hiệu số</th>
+      <th class="text-end" > Điểm</th>
+
+    </tr>
+  </thead>
+  <tbody >
+    <tr *ngFor="let team of teams; let i = index" >
+          <td [ngClass]="{'top-team': i === 0}">{{ i + 1 }}</td>
+          <td>
+            <img *ngIf="team.logoUrl; else noLogo" [src]="team.logoUrl" alt="{{team.name}} logo" class="team-logo">
+            <ng-template #noLogo>
+              <img src="./assets/img/defaultLogo.jpg" class="team-logo" alt="">
+            </ng-template>
+            {{team.name}}
+          </td>
+
+          <td class="text-end d-none-sm">{{team.win}}</td>
+          <td class="text-end d-none-sm">{{team.loss}}</td>
+          <td class="text-end d-none-sm">{{team.draw}}</td>
+          <td class="text-end d-none-sm">{{team.goalWin}}</td>
+          <td class="text-end d-none-sm">{{team.goalLoss}}</td>
+          <td class="text-end d-none-sm">{{team.difference}}</td>
+          <td class="text-end fw-bold" >{{team.score}}</td>
+          <td class="text-end "> 
+            <button class="btn btn-sm btn-info d-sm-none" (click)="toggleDetails(i)">Chi tiết</button>
+            <div class="details" *ngIf="team.showDetails">
+              <p>Thắng: {{team.win}}</p>
+              <p>Thua: {{team.loss}}</p>
+              <p>Hòa: {{team.draw}}</p>
+              <p>Bàn thắng: {{team.goalWin}}</p>
+              <p>Bàn thua: {{team.goalLoss}}</p>
+              <p>Hiệu số: {{team.difference}}</p>
+            </div>
+          </td>
+          
+
+    </tr>
+  <tbody>
+</table>
+<div class="notice-box">
+  <h3>Quy tắc:</h3>
+  <ul>
+    <li><span>Thắng:</span> +3 điểm</li>
+    <li><span>Thua:</span> 0 điểm</li>
+    <li><span>Hòa:</span> +1 điểm</li>
+  </ul>
+</div>
+<ng-template #noData>
+  <tr>
+    <td colspan="7" style="color: rgb(166, 27, 166);">Chưa có dữ liệu</td>
+  </tr>
+</ng-template>
+
