@@ -2,7 +2,6 @@ package com.manageleaguefootball.demo.dto;
 
 import lombok.Data;
 
-import java.util.Set;
 
 @Data
 public class PlayerDTO {
@@ -13,11 +12,5 @@ public class PlayerDTO {
   private int goal;
   private int assist;
   private String idTeam;
-   private String avatar;
-
-
-
-
-
-
+  private String avatar;
 }

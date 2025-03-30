@@ -1,9 +1,7 @@
 package com.manageleaguefootball.demo.service.impl;
 
 import com.manageleaguefootball.demo.dto.PlayerDTO;
-import com.manageleaguefootball.demo.dto.TeamDTO;
 import com.manageleaguefootball.demo.model.Player;
-import com.manageleaguefootball.demo.model.Season;
 import com.manageleaguefootball.demo.model.Team;
 import com.manageleaguefootball.demo.repository.PlayerRepository;
 import com.manageleaguefootball.demo.repository.TeamRepository;

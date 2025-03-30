@@ -48,5 +48,4 @@ public class LeagueController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-
 }

@@ -30,6 +30,7 @@ public class ScheduleController {
 
   @GetMapping("/{id}")
   public ResponseEntity<List<ScheduleDTO>> getSchedulesBySeasonId(@PathVariable("id") String id) {
+    System.out.println("hellloooooooooooooooooooooooo" + id);
     List<ScheduleDTO> schedules = scheduleService.getSchedulesByIdSeason(id);
     return ResponseEntity.ok(schedules);
   }
@@ -37,6 +38,8 @@ public class ScheduleController {
   @PutMapping("")
   public ResponseEntity<ScheduleDTO> updateScore(@RequestBody @Valid ScheduleDTO model) {
     ScheduleDTO schedule = scheduleService.updateScore(model);
+    System.out.println("vào day");
+
     return ResponseEntity.ok(schedule);
   }
 }

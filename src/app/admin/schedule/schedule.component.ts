@@ -38,6 +38,7 @@ export class ScheduleComponent implements OnInit{
     let id = this.router.snapshot.paramMap.get('id');
     this.seasonService.getSeasonById(id).subscribe(data => {
         this.typeTournament = data.typeTournament;
+        console.log(data.typeTournament)
         this.scheduleService.getSchedulesBySeasonId(id).subscribe(data => {
           if(data.length > 0) {
             this.schedules = this.chunkArray(data, 4);;
