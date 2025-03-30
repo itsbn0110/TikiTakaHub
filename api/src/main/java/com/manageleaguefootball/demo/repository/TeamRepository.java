@@ -10,5 +10,5 @@ import java.util.List;
 public interface TeamRepository extends MongoRepository<Team, String>, TeamRepositoryCustom {
   List<Team> findAllByIdSeason(String idSeason);
   void deleteAllByIdSeason(String idSeason);
-  Team findByName(String name);
+  Team findFirstByName(String name);
 }
