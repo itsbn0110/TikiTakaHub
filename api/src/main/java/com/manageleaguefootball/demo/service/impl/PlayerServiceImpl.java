@@ -63,6 +63,9 @@ public class PlayerServiceImpl implements PlayerService {
   @Override
   public List<PlayerDTO> findPlayerByIdTeam(String id) {
     List<Player> player = playerRepository.findAllByIdTeam(id);
+    if(player == null) {
+      throw new AppException(ErrorCode.PLAYER_NOT_FOUND);
+    }
     return mapToView(player);
   }
 

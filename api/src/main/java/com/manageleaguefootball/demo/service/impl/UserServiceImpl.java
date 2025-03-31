@@ -1,6 +1,8 @@
 package com.manageleaguefootball.demo.service.impl;
 
 import com.manageleaguefootball.demo.dto.UserDTO;
+import com.manageleaguefootball.demo.exception.AppException;
+import com.manageleaguefootball.demo.exception.ErrorCode;
 import com.manageleaguefootball.demo.model.User;
 import com.manageleaguefootball.demo.repository.UserRepository;
 import com.manageleaguefootball.demo.service.UserService;
@@ -47,17 +49,28 @@ public class UserServiceImpl implements UserService {
     if (userOptional.isPresent()) {
       User user = userOptional.get();
       return user.getPassword().equals(password);
+    } 
+    else {
+      throw new AppException(ErrorCode.INVALID_PASSWORD);
     }
-    return false;
+    
   }
 
   @Override
   public boolean checkEmailExists(String email) {
-    return userRepository.findUserByEmail(email).isPresent();
+    boolean exists = userRepository.findUserByEmail(email).isPresent();
+    if (!exists) {
+      throw new AppException(ErrorCode.UNAUTHENTICATED);
+    }
+    return true;
   }
 
   @Override
   public boolean login(UserDTO userDTO) {
-    return userRepository.existsByUsernameAndPassword(userDTO.getUsername(), userDTO.getPassword());
+    boolean exists = userRepository.existsByUsernameAndPassword(userDTO.getUsername(), userDTO.getPassword());
+    if (!exists) {
+        throw new AppException(ErrorCode.UNAUTHENTICATED);
+    }
+    return true;
   }
 }

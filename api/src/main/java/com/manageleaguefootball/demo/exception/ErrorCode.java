@@ -18,8 +18,6 @@ public enum ErrorCode {
     
     UNAUTHENTICATED(1007, "UNAUTHENTICATED_ERROR", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1008, "DO_NOT_HAVE_PERMISSION!", HttpStatus.FORBIDDEN),
-    INVALID_DOB(1009, "Your age must be at least {min}!", HttpStatus.FORBIDDEN),
-    MISSING_FILE(1010, "Missing field: ", HttpStatus.BAD_REQUEST),
 
 
 
