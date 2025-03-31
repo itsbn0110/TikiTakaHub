@@ -1,6 +1,8 @@
 package com.manageleaguefootball.demo.service.impl;
 
 import com.manageleaguefootball.demo.dto.PlayerDTO;
+import com.manageleaguefootball.demo.exception.AppException;
+import com.manageleaguefootball.demo.exception.ErrorCode;
 import com.manageleaguefootball.demo.model.Player;
 import com.manageleaguefootball.demo.model.Team;
 import com.manageleaguefootball.demo.repository.PlayerRepository;
@@ -9,9 +11,7 @@ import com.manageleaguefootball.demo.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -52,7 +52,8 @@ public class PlayerServiceImpl implements PlayerService {
   public PlayerDTO createPlayer(PlayerDTO model) {
     Team team = teamRepository.findById(model.getIdTeam()).orElse(null);
     if(team == null) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team id not found");
+      throw new AppException(ErrorCode.TEAM_NOT_FOUND);
+
     }
     Player players = mapper().map(model, Player.class);
 
@@ -69,7 +70,7 @@ public class PlayerServiceImpl implements PlayerService {
   public PlayerDTO updatePlayer(PlayerDTO model) {
     Player player = playerRepository.findById(model.getId()).orElse(null);
     if(player == null) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player id not found");
+      throw new AppException(ErrorCode.PLAYER_NOT_FOUND);
     }
     mapper().map(model, player);
     return mapToViews(playerRepository.save(player));
@@ -79,7 +80,7 @@ public class PlayerServiceImpl implements PlayerService {
   public PlayerDTO deletePlayer(String id) {
     Player player = playerRepository.findById(id).orElse(null);
     if(player == null) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player id not found");
+      throw new AppException(ErrorCode.PLAYER_NOT_FOUND);
     }
     playerRepository.delete(player);
     return mapToViews(player);

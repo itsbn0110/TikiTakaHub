@@ -1,6 +1,8 @@
 package com.manageleaguefootball.demo.service.impl;
 
 import com.manageleaguefootball.demo.dto.Info.TeamPageInfo;
+import com.manageleaguefootball.demo.exception.AppException;
+import com.manageleaguefootball.demo.exception.ErrorCode;
 import com.manageleaguefootball.demo.dto.TeamDTO;
 import com.manageleaguefootball.demo.model.Schedule;
 import com.manageleaguefootball.demo.model.Season;
@@ -12,9 +14,8 @@ import com.manageleaguefootball.demo.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.Comparator;
 import java.util.List;
@@ -55,7 +56,7 @@ public class TeamServiceImpl implements TeamService {
     public TeamDTO createTeam(TeamDTO model) {
         Season season = seasonRepository.findById(model.getIdSeason()).orElse(null);
         if (season == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Season id not found");
+            throw new AppException(ErrorCode.SEASON_NOT_FOUND);
         }
         Team team = mapper().map(model, Team.class);
         return mapToView(teamRepository.save(team));
@@ -65,7 +66,7 @@ public class TeamServiceImpl implements TeamService {
     public TeamDTO updateTeam(TeamDTO model) {
         Team team = teamRepository.findById(model.getId()).orElse(null);
         if (team == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team id not found");
+            throw new AppException(ErrorCode.TEAM_NOT_FOUND);
         }
         mapper().map(model, team);
         return mapToView(teamRepository.save(team));
@@ -81,7 +82,7 @@ public class TeamServiceImpl implements TeamService {
     public TeamDTO deleteTeam(String id) {
         Team team = teamRepository.findById(id).orElse(null);
         if (team == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Team id not found");
+            throw new AppException(ErrorCode.TEAM_NOT_FOUND);
         }
         teamRepository.delete(team);
         return mapToView(team);

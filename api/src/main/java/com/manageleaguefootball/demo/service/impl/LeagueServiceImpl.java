@@ -2,6 +2,8 @@ package com.manageleaguefootball.demo.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.manageleaguefootball.demo.dto.LeagueDTO;
+import com.manageleaguefootball.demo.exception.AppException;
+import com.manageleaguefootball.demo.exception.ErrorCode;
 import com.manageleaguefootball.demo.model.League;
 import com.manageleaguefootball.demo.repository.LeagueRepository;
 import com.manageleaguefootball.demo.repository.SeasonRepository;
@@ -9,10 +11,8 @@ import com.manageleaguefootball.demo.service.LeagueService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.List;
@@ -62,7 +62,7 @@ public class LeagueServiceImpl implements LeagueService {
     public LeagueDTO updateLeague(LeagueDTO model) {
         League league = repository.findById(model.getId()).orElse(null);
         if(league == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "League not found");
+            throw new AppException(ErrorCode.LEAGUE_NOT_FOUND);
         }
         mapper().map(model, league);
         return mapToView(repository.save(league));
@@ -71,9 +71,11 @@ public class LeagueServiceImpl implements LeagueService {
     @Override
     public LeagueDTO deleteLeague(String id) {
         League league = repository.findById(id).orElse(null);
+        System.out.println("hello");
         if(league == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "League not found");
+            throw new AppException(ErrorCode.LEAGUE_NOT_FOUND);
         }
+        System.out.println("hi");
         seasonRepository.deleteByIdLeague(id);
         repository.delete(league);
         return mapToView(league);
@@ -85,13 +87,13 @@ public class LeagueServiceImpl implements LeagueService {
         String img = (String) data.get("secure_url");
         League league = this.repository.findById(id).orElse(null);
         if(league == null) {
-          throw new IllegalArgumentException("League not found");
+            throw new AppException(ErrorCode.LEAGUE_NOT_FOUND);
         }
         league.setLogoUrl(img);
         repository.save(league);
         return mapToView(league);
       }catch (IOException io){
-        throw new RuntimeException("Image upload fail");
+        throw new AppException(ErrorCode.UPLOAD_IMAGE_FAILED);
       }
     }
 }

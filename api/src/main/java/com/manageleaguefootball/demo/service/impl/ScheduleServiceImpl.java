@@ -1,6 +1,8 @@
 package com.manageleaguefootball.demo.service.impl;
 
 import com.manageleaguefootball.demo.dto.ScheduleDTO;
+import com.manageleaguefootball.demo.exception.AppException;
+import com.manageleaguefootball.demo.exception.ErrorCode;
 import com.manageleaguefootball.demo.model.Schedule;
 import com.manageleaguefootball.demo.model.Team;
 import com.manageleaguefootball.demo.repository.ScheduleRepository;
@@ -9,9 +11,7 @@ import com.manageleaguefootball.demo.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,7 +107,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ScheduleDTO updateScore(ScheduleDTO model) {
         Schedule schedule = scheduleRepository.findById(model.getId()).orElse(null);
         if (schedule == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found");
+            throw new AppException(ErrorCode.SCHEDULE_NOT_FOUND);
         }
         schedule.setHomeScore(model.getHomeScore());
         schedule.setAwayScore(model.getAwayScore());
@@ -121,7 +121,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<ScheduleDTO> generateRound(String idSeason) {
         List<Team> teams = teamRepository.findAllByIdSeason(idSeason);
         if (teams == null || teams.size() < 2) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough teams to generate schedule");
+            throw new AppException(ErrorCode.NOT_ENOUGH_TEAM);
         }
         List<Schedule> schedules = new ArrayList<>();
         for (int i = 0; i < teams.size() - 1; i++) {
@@ -142,7 +142,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<ScheduleDTO> generateKnockOut(String idSeason) {
         List<Team> teams = teamRepository.findAllByIdSeason(idSeason);
         if (teams == null || teams.size() < 2) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough teams to generate schedule");
+            throw new AppException(ErrorCode.NOT_ENOUGH_TEAM);
         }
         List<Schedule> schedules = new ArrayList<>();
         for (int i = 0; i < teams.size(); i += 2) {
