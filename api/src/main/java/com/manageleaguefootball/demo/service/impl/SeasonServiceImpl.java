@@ -1,6 +1,8 @@
 package com.manageleaguefootball.demo.service.impl;
 
 import com.manageleaguefootball.demo.dto.SeasonDTO;
+import com.manageleaguefootball.demo.exception.AppException;
+import com.manageleaguefootball.demo.exception.ErrorCode;
 import com.manageleaguefootball.demo.model.League;
 import com.manageleaguefootball.demo.model.Season;
 import com.manageleaguefootball.demo.repository.LeagueRepository;
@@ -49,7 +51,7 @@ public class SeasonServiceImpl implements SeasonService {
   public SeasonDTO createSeason(SeasonDTO model) {
     League league = leagueRepository.findById(model.getIdLeague()).orElse(null);
     if(league == null) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "League id not found" + model.getIdLeague());
+      throw new AppException(ErrorCode.SEASON_NOT_FOUND);
     }
 
     Season season = mapper().map(model, Season.class);
@@ -60,7 +62,7 @@ public class SeasonServiceImpl implements SeasonService {
   public SeasonDTO getSeasonById(String id) {
     Season season = seasonRepository.findById(id).orElse(null);
     if(season == null) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Season id not found" + id);
+      throw new AppException(ErrorCode.SEASON_NOT_FOUND);
     }
     return mapToView(season);
   }
@@ -83,7 +85,7 @@ public class SeasonServiceImpl implements SeasonService {
   public SeasonDTO updateSeason(SeasonDTO model) {
     Season season = seasonRepository.findById(model.getId()).orElse(null);
     if(season == null) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Season not found");
+      throw new AppException(ErrorCode.SEASON_NOT_FOUND);
     }
     mapper().map(model, season);
     return mapToView(seasonRepository.save(season));
@@ -93,7 +95,7 @@ public class SeasonServiceImpl implements SeasonService {
   public SeasonDTO deleteSeason(String id) {
     Season season = seasonRepository.findById(id).orElse(null);
     if(season == null) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Season id  not found " + id);
+      throw new AppException(ErrorCode.SEASON_NOT_FOUND);
     }
     teamRepository.deleteAllByIdSeason(id);
     seasonRepository.delete(season);

@@ -3,6 +3,8 @@ package com.manageleaguefootball.demo.service.impl;
 import com.cloudinary.Cloudinary;
 import com.manageleaguefootball.demo.dto.PlayerDTO;
 import com.manageleaguefootball.demo.dto.TeamDTO;
+import com.manageleaguefootball.demo.exception.AppException;
+import com.manageleaguefootball.demo.exception.ErrorCode;
 import com.manageleaguefootball.demo.model.Player;
 import com.manageleaguefootball.demo.model.Team;
 import com.manageleaguefootball.demo.repository.PlayerRepository;
@@ -45,13 +47,13 @@ public class CloudinaryService {
       String img = (String) data.get("secure_url");
       Team team = this.teamRepository.findById(id).orElse(null);
       if(team == null) {
-        throw new IllegalArgumentException("Team not found");
+       throw new AppException(ErrorCode.TEAM_NOT_FOUND);
       }
       team.setLogoUrl(img);
       teamRepository.save(team);
       return mapToView(team);
     }catch (IOException io){
-      throw new RuntimeException("Image upload fail");
+      throw new AppException(ErrorCode.UPLOAD_IMAGE_FAILED);
     }
   }
 
@@ -69,13 +71,13 @@ public class CloudinaryService {
       String img = (String) data.get("secure_url");
       Player player = this.playerRepository.findById(id).orElse(null);
       if(player == null) {
-        throw new IllegalArgumentException("player not found");
+        throw new AppException(ErrorCode.PLAYER_NOT_FOUND);
       }
       player.setAvatar(img);
       playerRepository.save(player);
       return mapToView(player);
     }catch (IOException io){
-      throw new RuntimeException("Image upload fail");
+      throw new AppException(ErrorCode.UPLOAD_IMAGE_FAILED);
     }
   }
 }
